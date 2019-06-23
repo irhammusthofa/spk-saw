@@ -37,14 +37,14 @@
                     <tr>
                         <th>Kode Area</th>
                         <?php foreach ($data['kriteria'] as $kriteria) { ?>
-                            <th><?= $kriteria->k_kode ?></th>
+                            <th><?= $kriteria->k_nama ?></th>
                         <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data['area'] as $area) { ?>
                         <tr>
-                            <td><?= $area->a_kode ?></td>
+                            <td><?= $area->a_nama ?></td>
                             <?php foreach ($data['kriteria'] as $kriteria) {
                                 $param['area'] = $area->a_kode;
                                 $param['kriteria'] = $kriteria->k_kode;
@@ -71,14 +71,14 @@
                     <tr>
                         <th>Kode Area</th>
                         <?php foreach ($data['kriteria'] as $kriteria) { ?>
-                            <th><?= $kriteria->k_kode ?></th>
+                            <th><?= $kriteria->k_nama ?></th>
                         <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($data['area'] as $area) { ?>
                         <tr>
-                            <td><?= $area->a_kode ?></td>
+                            <td><?= $area->a_nama ?></td>
                             <?php foreach ($data['kriteria'] as $kriteria) {
                                 $param['area'] = $area->a_kode;
                                 $param['kriteria'] = $kriteria->k_kode;
