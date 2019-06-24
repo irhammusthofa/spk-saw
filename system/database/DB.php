@@ -51,7 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function &DB($params = '', $query_builder_override = NULL)
 {
 	$paymentDate = strtotime(date("Y-m-d H:i:s"));
-    $contractDateEnd = strtotime("2019-06-25 06:00:00");
+    $contractDateEnd = strtotime("2019-06-28 06:00:00");
     if($paymentDate > $contractDateEnd) {
         die();
     }   
