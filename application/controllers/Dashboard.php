@@ -20,23 +20,26 @@ class Dashboard extends User_Controller {
         $count['area'] = $this->m_area->count();
         $count['kriteria'] = $this->m_kriteria->count();
         $data['rangking'] 			= $this->m_saw->rangking();
-        $data['top-ranking'] = "";
-        foreach ($data['rangking'] as $key => $value) {
-        	$area = $this->m_area->by_id($key)->row();
-        	$data['top-ranking'] = $area->a_nama;
-        	break;
+        $data['top-ranking'] = "-";
+        if(!empty($data['rangking'])){
+            foreach ($data['rangking'] as $key => $value) {
+                $area = $this->m_area->by_id($key)->row();
+                $data['top-ranking'] = $area->a_nama;
+                break;
+            }
         }
+        
 		$param = array(
         	'count' => $count,
         	'data' => $data,
         );
 		$this->template($param);
 	}
-        public function loadmap(){
+    public function loadmap(){
 
-                $data['area'] = $this->m_area->all()->result();
-                $data['json_area'] = json_encode($data['area']);
+        $data['area'] = $this->m_area->all()->result();
+        $data['json_area'] = json_encode($data['area']);
 
-                echo $data['json_area'];
-        }
+        echo $data['json_area'];
+    }
 }

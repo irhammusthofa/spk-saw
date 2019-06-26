@@ -61,12 +61,15 @@ class M_saw extends CI_Model
         }
         
         $average = $this->average();
-        uasort($average,'cmp');
-        $rank = 1;
-        foreach ($average as $key => $val) {
-            $average[$key] = $rank;
-            $rank++;
+        if (!empty($average)){
+            uasort($average,'cmp');
+            $rank = 1;
+            foreach ($average as $key => $val) {
+                $average[$key] = $rank;
+                $rank++;
+            }
         }
+        
         return $average;
     }
 }

@@ -83,3 +83,11 @@ $route['user/saw/cetak']         = 'saw/cetak';
 $route['user/saw/cetak/lengkap']         = 'saw/cetak_lengkap';
 $route['user/grafik']         = 'grafik';
 
+$route['user/tahun'] = 'tahun/index';
+$route['user/tahun/changetahun/(:any)/(:any)'] = 'tahun/changetahun/$1/$2';
+$route['user/tahun/add'] = 'tahun/add';
+$route['user/tahun/edit/(:any)'] = 'tahun/edit/$1';
+$route['user/tahun/hapus/(:any)'] = 'tahun/delete/$1';
+$route['user/tahun/simpan'] = 'tahun/save';
+$route['user/tahun/update/(:any)'] = 'tahun/update/$1';
+

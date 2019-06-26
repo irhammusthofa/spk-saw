@@ -32,14 +32,15 @@ class Grafik extends User_Controller
 
         $arrArea = [];
         $arrVal = [];
+        $arrRank = [];
         foreach ($data['area'] as $area) {
             $arrArea[]  = $area->a_kode.' - '.$area->a_nama;
             $arrVal[]   = $data['average'][$area->a_kode];
             $arrRank[]  = $data['rangking'][$area->a_kode];
         }
         echo json_encode(array(
-            'status' => true,
-            'messag' => 'Berhasil',
+            'status' => (count($data['area'])>0),
+            'message' => (count($data['area'])>0) ? 'Berhasil' : 'Tidak ada data',
             'area'   => $arrArea,
             'rata'   => $arrVal,
             'rank'   => $arrRank,

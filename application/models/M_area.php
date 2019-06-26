@@ -17,6 +17,7 @@ class M_area extends CI_Model
     private function _get_datatables_query($param='')
     {
         $this->db->from($this->table);
+        $this->db->where('id_tahun',$this->thn_aktif);
     
         $i = 0;
         foreach ($this->column_search as $item) // loop column
@@ -69,9 +70,11 @@ class M_area extends CI_Model
     public function count_all($param='')
     {
         $this->db->from($this->table);
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->count_all_results();
     }
     public function all(){
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->from('area')->order_by('a_kode','asc')->get();
     }
     public function save(){
@@ -80,6 +83,7 @@ class M_area extends CI_Model
         $data['a_alamat']       = $this->input->post('alamat',TRUE);
         $data['a_telp']         = $this->input->post('telp',TRUE);
         $data['a_kordinat']     = $this->input->post('kordinat',TRUE);
+        $data['id_tahun']       = $this->thn_aktif;
 
         return $this->db->insert('area',$data);
     }
@@ -99,6 +103,7 @@ class M_area extends CI_Model
         return $this->db->delete('area',$data);
     }
     public function count(){
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->from('area')->count_all_results();
     }
     public function generate_id(){

@@ -16,6 +16,7 @@ class User_Controller extends CI_Controller {
 	public $assets 			= array();
 	public $current_class;
 	public $current_method;
+	public $thn_aktif;
 	public function __construct(){
 		parent::__construct();
         $paymentDate = strtotime(date("Y-m-d H:i:s"));
@@ -27,6 +28,32 @@ class User_Controller extends CI_Controller {
 		$this->current_method = strtolower($this->router->fetch_method());
 
 		$this->load->model('m_user');
+		$this->load->model('m_tahun');
+		$data_tahun = $this->m_tahun->all()->result();
+		$selected_tahun = '';
+		$this->thn_aktif = '';
+
+		foreach ($data_tahun as $item) {
+			if (empty($selected_tahun)){
+				$selected_tahun = $item->thn_id;
+			}
+			$tahun[$item->thn_id] = $item->thn_id;
+			if ($item->thn_status==1){
+				$selected_tahun = $item->thn_id;
+				$this->thn_aktif = $item->thn_id;
+			}
+		}
+		$this->session->set_userdata('tahun',$tahun);
+		
+		if (empty($this->session->userdata('tahun_aktif'))){
+			$this->session->set_userdata('tahun_aktif',$selected_tahun);	
+		}else{
+			if ($this->session->userdata($this->_ROLE)!='user'){
+				$this->session->set_userdata('tahun_aktif',$selected_tahun);
+			}else{
+				$this->thn_aktif = $this->session->userdata('tahun_aktif');
+			}
+		}
 		$this->init();
 	}
 	public function auth(){

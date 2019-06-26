@@ -17,6 +17,7 @@ class M_kriteria extends CI_Model
     private function _get_datatables_query($param='')
     {
         $this->db->from($this->table);
+        $this->db->where('id_tahun',$this->thn_aktif);
     
         $i = 0;
         foreach ($this->column_search as $item) // loop column
@@ -67,20 +68,24 @@ class M_kriteria extends CI_Model
     }
     
     public function count(){
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->from('kriteria')->count_all_results();
     }
     public function count_all($param='')
     {
         $this->db->from($this->table);
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->count_all_results();
     }
     public function all(){
+        $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->from('kriteria')->order_by('k_kode','asc')->get();
     }
     public function save(){
         $data['k_kode']         = $this->input->post('kode',TRUE);
         $data['k_nama']         = $this->input->post('nama',TRUE);
         $data['k_bobot']       = $this->input->post('bobot',TRUE);
+        $data['id_tahun']       = $this->thn_aktif;
 
 
         return $this->db->insert('kriteria',$data);
