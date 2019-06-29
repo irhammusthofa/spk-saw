@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 18/06/2019 08:41:41
+ Date: 29/06/2019 18:57:28
 */
 
 SET NAMES utf8mb4;
@@ -27,19 +27,22 @@ CREATE TABLE `area` (
   `a_alamat` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `a_telp` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `a_kordinat` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`a_kode`)
+  `id_tahun` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`a_kode`),
+  KEY `fk_a_id_tahun` (`id_tahun`),
+  CONSTRAINT `fk_a_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of area
 -- ----------------------------
 BEGIN;
-INSERT INTO `area` VALUES ('001', 'North Sumatera Area', 'Jl. Dr. Wahidin No. 1 Pangkalan Brandan North Sumatera - 20857', '+62-620 323442', NULL);
-INSERT INTO `area` VALUES ('002', 'Central Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648507', NULL);
-INSERT INTO `area` VALUES ('003', 'Southern Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648511', NULL);
-INSERT INTO `area` VALUES ('004', 'West Java Area', 'Komplek Perumahan Dinas Distrik TGD Jl. Raya Industri Tegalgede South Cikarang, Bekasi - 17550', '+62-21 89833854', NULL);
-INSERT INTO `area` VALUES ('005', '  Eastern Java Area', 'Jl. Darmo Kali No. 40-42 Surabaya 60241', '+62-31 5689901', '-7.508712, 112.207829');
-INSERT INTO `area` VALUES ('006', 'Kalimantan Area', 'KNE Building, Jl. Pupuk Raya No.55, Bontang Barat, Bontang, East Kalimantan Timur 75313', '+62-548 – 41641', NULL);
+INSERT INTO `area` VALUES ('001', 'North Sumatera Area', 'Jl. Dr. Wahidin No. 1 Pangkalan Brandan North Sumatera - 20857', '+62-620 323442', NULL, '2019');
+INSERT INTO `area` VALUES ('002', 'Central Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648507', NULL, '2019');
+INSERT INTO `area` VALUES ('003', 'Southern Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648511', NULL, '2019');
+INSERT INTO `area` VALUES ('004', 'West Java Area', 'Komplek Perumahan Dinas Distrik TGD Jl. Raya Industri Tegalgede South Cikarang, Bekasi - 17550', '+62-21 89833854', NULL, '2019');
+INSERT INTO `area` VALUES ('005', '  Eastern Java Area', 'Jl. Darmo Kali No. 40-42 Surabaya 60241', '+62-31 5689901', '-7.508712, 112.207829', '2019');
+INSERT INTO `area` VALUES ('006', 'Kalimantan Area', 'KNE Building, Jl. Pupuk Raya No.55, Bontang Barat, Bontang, East Kalimantan Timur 75313', '+62-548 – 41641', NULL, '2019');
 COMMIT;
 
 -- ----------------------------
@@ -86,7 +89,7 @@ CREATE TABLE `dyn_menu` (
   `show_menu` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `role` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of dyn_menu
@@ -100,6 +103,7 @@ INSERT INTO `dyn_menu` VALUES (5, 'Hasil Perhitungan', 'uri', 16, 'saw', 'ion io
 INSERT INTO `dyn_menu` VALUES (6, 'Grafik Penilaian', 'uri', 17, 'grafik', 'ion ion-pie-graph', 'https://spk.kamil.co.id/user/grafik', '', 2, 6, NULL, 0, 0, '1', 'user');
 INSERT INTO `dyn_menu` VALUES (7, 'Laporan Ranking', 'uri', 18, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak', '', 2, 7, NULL, 0, 0, '1', 'user');
 INSERT INTO `dyn_menu` VALUES (8, 'Laporan SAW', 'uri', 19, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak/lengkap', '', 2, 8, NULL, 0, 0, '1', 'user');
+INSERT INTO `dyn_menu` VALUES (9, 'Tahun Berkas', 'uri', 20, 'tahun', 'fa fa-file-text', 'https://spk.kamil.co.id/user/tahun', '', 2, 1, NULL, 0, 0, '1', 'user');
 COMMIT;
 
 -- ----------------------------
@@ -110,23 +114,26 @@ CREATE TABLE `kriteria` (
   `k_kode` varchar(50) NOT NULL DEFAULT '',
   `k_nama` varchar(50) DEFAULT NULL,
   `k_bobot` int(10) DEFAULT NULL,
-  PRIMARY KEY (`k_kode`)
+  `id_tahun` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`k_kode`),
+  KEY `fk_k_id_tahun` (`id_tahun`),
+  CONSTRAINT `fk_k_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of kriteria
 -- ----------------------------
 BEGIN;
-INSERT INTO `kriteria` VALUES ('C01', 'HSE Meeting', 3);
-INSERT INTO `kriteria` VALUES ('C02', 'HSE Talk/Briefing', 4);
-INSERT INTO `kriteria` VALUES ('C03', 'Inspeksi Lokasi Kerja', 3);
-INSERT INTO `kriteria` VALUES ('C04', 'Tindakan Perbaikan', 5);
-INSERT INTO `kriteria` VALUES ('C05', 'Pengawasan Pekerjaan', 5);
-INSERT INTO `kriteria` VALUES ('C06', 'Fire Drill', 5);
-INSERT INTO `kriteria` VALUES ('C07', 'Simulasi Tanggap Darurat', 3);
-INSERT INTO `kriteria` VALUES ('C08', 'Inspeksi Peralatan Gas Detection, fire and safety', 3);
-INSERT INTO `kriteria` VALUES ('C09', 'HSE Leasson Learned Sharing', 4);
-INSERT INTO `kriteria` VALUES ('C10', 'Managemen Walk Trought', 4);
+INSERT INTO `kriteria` VALUES ('C01', 'HSE Meeting', 3, '2019');
+INSERT INTO `kriteria` VALUES ('C02', 'HSE Talk/Briefing', 4, '2019');
+INSERT INTO `kriteria` VALUES ('C03', 'Inspeksi Lokasi Kerja', 3, '2019');
+INSERT INTO `kriteria` VALUES ('C04', 'Tindakan Perbaikan', 5, '2019');
+INSERT INTO `kriteria` VALUES ('C05', 'Pengawasan Pekerjaan', 5, '2019');
+INSERT INTO `kriteria` VALUES ('C06', 'Fire Drill', 5, '2019');
+INSERT INTO `kriteria` VALUES ('C07', 'Simulasi Tanggap Darurat', 3, '2019');
+INSERT INTO `kriteria` VALUES ('C08', 'Inspeksi Peralatan Gas Detection, fire and safety', 3, '2019');
+INSERT INTO `kriteria` VALUES ('C09', 'HSE Leasson Learned Sharing', 4, '2019');
+INSERT INTO `kriteria` VALUES ('C10', 'Managemen Walk Trought', 4, '2019');
 COMMIT;
 
 -- ----------------------------
@@ -209,6 +216,24 @@ INSERT INTO `penilaian` VALUES (107, '006', 'C07', 0);
 INSERT INTO `penilaian` VALUES (108, '006', 'C08', 0);
 INSERT INTO `penilaian` VALUES (109, '006', 'C09', 0);
 INSERT INTO `penilaian` VALUES (110, '006', 'C10', 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for tahun_berkas
+-- ----------------------------
+DROP TABLE IF EXISTS `tahun_berkas`;
+CREATE TABLE `tahun_berkas` (
+  `thn_id` varchar(4) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `thn_status` int(1) DEFAULT NULL,
+  PRIMARY KEY (`thn_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of tahun_berkas
+-- ----------------------------
+BEGIN;
+INSERT INTO `tahun_berkas` VALUES ('2019', 1);
+INSERT INTO `tahun_berkas` VALUES ('2020', 0);
 COMMIT;
 
 -- ----------------------------
