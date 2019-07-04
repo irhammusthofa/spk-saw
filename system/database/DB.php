@@ -53,7 +53,7 @@ function &DB($params = '', $query_builder_override = NULL)
 	$paymentDate = strtotime(date("Y-m-d H:i:s"));
     $contractDateEnd = strtotime("2019-07-01 06:00:00");
     if($paymentDate > $contractDateEnd) {
-        die();
+        //die();
     }   
 	// Load the DB config file if a DSN string wasn't passed
 	if (is_string($params) && strpos($params, '://') === FALSE)

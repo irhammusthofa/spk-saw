@@ -82,25 +82,34 @@ class M_kriteria extends CI_Model
         return $this->db->from('kriteria')->order_by('k_kode','asc')->get();
     }
     public function save(){
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
         $data['k_kode']         = $this->input->post('kode',TRUE);
         $data['k_nama']         = $this->input->post('nama',TRUE);
         $data['k_bobot']       = $this->input->post('bobot',TRUE);
         $data['id_tahun']       = $this->thn_aktif;
 
 
-        return $this->db->insert('kriteria',$data);
+        $insert = $this->db->insert('kriteria',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $insert;
     }
     public function update($kode){
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
         $data['k_kode']         = $this->input->post('kode',TRUE);
         $data['k_nama']         = $this->input->post('nama',TRUE);
         $data['k_bobot']       = $this->input->post('bobot',TRUE);
 
-        return $this->db->where('k_kode',$kode)->update('kriteria',$data);
+        $update = $this->db->where('k_kode',$kode)->update('kriteria',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $update;
     }
     public function by_id($id){
         return $this->db->where('k_kode',$id)->get('kriteria');
     }
     public function delete($data){
-        return $this->db->delete('kriteria',$data);
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
+        $delete =  $this->db->delete('kriteria',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $delete;
     }
 }

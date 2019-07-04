@@ -78,6 +78,7 @@ class M_area extends CI_Model
         return $this->db->from('area')->order_by('a_kode','asc')->get();
     }
     public function save(){
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
         $data['a_kode']         = $this->input->post('kode',TRUE);
         $data['a_nama']         = $this->input->post('nama',TRUE);
         $data['a_alamat']       = $this->input->post('alamat',TRUE);
@@ -85,22 +86,30 @@ class M_area extends CI_Model
         $data['a_kordinat']     = $this->input->post('kordinat',TRUE);
         $data['id_tahun']       = $this->thn_aktif;
 
-        return $this->db->insert('area',$data);
+        $insert = $this->db->insert('area',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $insert;
     }
     public function update($kode){
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
         $data['a_kode']         = $this->input->post('kode',TRUE);
         $data['a_nama']         = $this->input->post('nama',TRUE);
         $data['a_alamat']       = $this->input->post('alamat',TRUE);
         $data['a_telp']         = $this->input->post('telp',TRUE);
         $data['a_kordinat']     = $this->input->post('kordinat',TRUE);
 
-        return $this->db->where('a_kode',$kode)->update('area',$data);
+        $update = $this->db->where('a_kode',$kode)->update('area',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $update;
     }
     public function by_id($id){
         return $this->db->where('a_kode',$id)->get('area');
     }
     public function delete($data){
-        return $this->db->delete('area',$data);
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
+        $delete = $this->db->delete('area',$data);
+        $this->db->query('SET @user_id = NULL');
+        return $delete;
     }
     public function count(){
         $this->db->where('id_tahun',$this->thn_aktif);

@@ -1,79 +1,100 @@
-/*
- Navicat Premium Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 4.8.5
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Jul 04, 2019 at 06:01 PM
+-- Server version: 5.6.44
+-- PHP Version: 7.2.7
 
- Source Server         : kamil.co.id
- Source Server Type    : MySQL
- Source Server Version : 50644
- Source Host           : kamil.co.id:3306
- Source Schema         : kamilco_spk
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
- Target Server Type    : MySQL
- Target Server Version : 50644
- File Encoding         : 65001
 
- Date: 29/06/2019 18:57:28
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+--
+-- Database: `kamilco_spk`
+--
 
--- ----------------------------
--- Table structure for area
--- ----------------------------
-DROP TABLE IF EXISTS `area`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `area`
+--
+
 CREATE TABLE `area` (
   `a_kode` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `a_nama` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `a_alamat` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `a_telp` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `a_kordinat` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `id_tahun` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`a_kode`),
-  KEY `fk_a_id_tahun` (`id_tahun`),
-  CONSTRAINT `fk_a_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `id_tahun` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- ----------------------------
--- Records of area
--- ----------------------------
-BEGIN;
-INSERT INTO `area` VALUES ('001', 'North Sumatera Area', 'Jl. Dr. Wahidin No. 1 Pangkalan Brandan North Sumatera - 20857', '+62-620 323442', NULL, '2019');
-INSERT INTO `area` VALUES ('002', 'Central Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648507', NULL, '2019');
-INSERT INTO `area` VALUES ('003', 'Southern Sumatera Area', 'Jl. AKBP Cek Agus No 10, Kenten, Palembang - 30114', '+62-711 5648511', NULL, '2019');
-INSERT INTO `area` VALUES ('004', 'West Java Area', 'Komplek Perumahan Dinas Distrik TGD Jl. Raya Industri Tegalgede South Cikarang, Bekasi - 17550', '+62-21 89833854', NULL, '2019');
-INSERT INTO `area` VALUES ('005', '  Eastern Java Area', 'Jl. Darmo Kali No. 40-42 Surabaya 60241', '+62-31 5689901', '-7.508712, 112.207829', '2019');
-INSERT INTO `area` VALUES ('006', 'Kalimantan Area', 'KNE Building, Jl. Pupuk Raya No.55, Bontang Barat, Bontang, East Kalimantan Timur 75313', '+62-548 – 41641', NULL, '2019');
-COMMIT;
+--
+-- Dumping data for table `area`
+--
 
--- ----------------------------
--- Table structure for dyn_groups
--- ----------------------------
-DROP TABLE IF EXISTS `dyn_groups`;
+INSERT INTO `area` (`a_kode`, `a_nama`, `a_alamat`, `a_telp`, `a_kordinat`, `id_tahun`) VALUES
+('01', 'programerrrrr', 'android ', '12345678', '1213', '2020'),
+('02', 'analist', 'analis sistem', '342564y', '1214', '2020'),
+('03', 'guru', 'pendidikan', 'y5u57', '1218', '2020'),
+('04', 'it konsultan', 'wong pinter', '12222222', '', '2020');
+
+--
+-- Triggers `area`
+--
+DELIMITER $$
+CREATE TRIGGER `after_area_delete` AFTER DELETE ON `area` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="area",h_tipe="delete", h_user=@user_id,h_after=CONCAT("["",old.a_kode,"","",old.a_nama,"","",old.a_alamat,"","",old.a_telp,"","",old.a_kordinat,"","",old.id_tahun,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_area_insert` BEFORE INSERT ON `area` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="area",h_tipe="insert", h_user=@user_id,h_after=CONCAT("["",new.a_kode,"","",new.a_nama,"","",new.a_alamat,"","",new.a_telp,"","",new.a_kordinat,"","",new.id_tahun,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_area_update` AFTER UPDATE ON `area` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="area",h_tipe="update", h_user=@user_id,h_before=CONCAT("["",old.a_kode,"","",old.a_nama,"","",old.a_alamat,"","",old.a_telp,"","",old.a_kordinat,"","",old.id_tahun,""]"),h_after=CONCAT("["",new.a_kode,"","",new.a_nama,"","",new.a_alamat,"","",new.a_telp,"","",new.a_kordinat,"","",new.id_tahun,""]")
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dyn_groups`
+--
+
 CREATE TABLE `dyn_groups` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `title` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `abbrev` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Navigation groupings. Eg, header, sidebar, footer, etc';
+  `abbrev` varchar(20) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Navigation groupings. Eg, header, sidebar, footer, etc';
 
--- ----------------------------
--- Records of dyn_groups
--- ----------------------------
-BEGIN;
-INSERT INTO `dyn_groups` VALUES (1, 'Header', 'header');
-INSERT INTO `dyn_groups` VALUES (2, 'Sidebar', 'sidebar');
-INSERT INTO `dyn_groups` VALUES (3, 'Footer', 'footer');
-INSERT INTO `dyn_groups` VALUES (4, 'Topbar', 'topbar');
-INSERT INTO `dyn_groups` VALUES (5, 'Sidebar1', 'sidebar1');
-INSERT INTO `dyn_groups` VALUES (6, 'Sidebar2', 'sidebar2');
-COMMIT;
+--
+-- Dumping data for table `dyn_groups`
+--
 
--- ----------------------------
--- Table structure for dyn_menu
--- ----------------------------
-DROP TABLE IF EXISTS `dyn_menu`;
+INSERT INTO `dyn_groups` (`id`, `title`, `abbrev`) VALUES
+(1, 'Header', 'header'),
+(2, 'Sidebar', 'sidebar'),
+(3, 'Footer', 'footer'),
+(4, 'Topbar', 'topbar'),
+(5, 'Sidebar1', 'sidebar1'),
+(6, 'Sidebar2', 'sidebar2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `dyn_menu`
+--
+
 CREATE TABLE `dyn_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `link_type` varchar(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'uri',
   `page_id` int(11) NOT NULL DEFAULT '0',
@@ -87,176 +108,298 @@ CREATE TABLE `dyn_menu` (
   `parent_id` int(11) NOT NULL DEFAULT '0',
   `is_parent` tinyint(1) NOT NULL DEFAULT '0',
   `show_menu` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
-  `role` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `role` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- ----------------------------
--- Records of dyn_menu
--- ----------------------------
-BEGIN;
-INSERT INTO `dyn_menu` VALUES (1, 'Dasbor', 'uri', 1, 'dashboard', 'fa fa-dashboard', 'https://spk.kamil.co.id/user/dashboard', '', 2, 1, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (2, 'Data Area', 'uri', 2, 'area', 'fa fa-file-text', 'https://spk.kamil.co.id/user/area', '', 2, 2, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (3, 'Data Kriteria', 'uri', 3, 'kriteria', 'fa fa-file-text', 'https://spk.kamil.co.id/user/kriteria', '', 2, 3, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (4, 'Penilaian SAW', 'uri', 9, 'penilaian', 'ion ion-stats-bars', 'https://spk.kamil.co.id/user/penilaian', '', 2, 4, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (5, 'Hasil Perhitungan', 'uri', 16, 'saw', 'ion ion-stats-bars', 'https://spk.kamil.co.id/user/saw', '', 2, 5, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (6, 'Grafik Penilaian', 'uri', 17, 'grafik', 'ion ion-pie-graph', 'https://spk.kamil.co.id/user/grafik', '', 2, 6, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (7, 'Laporan Ranking', 'uri', 18, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak', '', 2, 7, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (8, 'Laporan SAW', 'uri', 19, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak/lengkap', '', 2, 8, NULL, 0, 0, '1', 'user');
-INSERT INTO `dyn_menu` VALUES (9, 'Tahun Berkas', 'uri', 20, 'tahun', 'fa fa-file-text', 'https://spk.kamil.co.id/user/tahun', '', 2, 1, NULL, 0, 0, '1', 'user');
-COMMIT;
+--
+-- Dumping data for table `dyn_menu`
+--
 
--- ----------------------------
--- Table structure for kriteria
--- ----------------------------
-DROP TABLE IF EXISTS `kriteria`;
+INSERT INTO `dyn_menu` (`id`, `title`, `link_type`, `page_id`, `module_name`, `icon`, `url`, `uri`, `dyn_group_id`, `position`, `target`, `parent_id`, `is_parent`, `show_menu`, `role`) VALUES
+(1, 'Dasbor', 'uri', 1, 'dashboard', 'fa fa-dashboard', 'https://spk.kamil.co.id/user/dashboard', '', 2, 1, NULL, 0, 0, '1', 'user'),
+(2, 'Data Area', 'uri', 2, 'area', 'fa fa-file-text', 'https://spk.kamil.co.id/user/area', '', 2, 2, NULL, 0, 0, '1', 'user'),
+(3, 'Data Kriteria', 'uri', 3, 'kriteria', 'fa fa-file-text', 'https://spk.kamil.co.id/user/kriteria', '', 2, 3, NULL, 0, 0, '1', 'user'),
+(4, 'Penilaian SAW', 'uri', 9, 'penilaian', 'ion ion-stats-bars', 'https://spk.kamil.co.id/user/penilaian', '', 2, 4, NULL, 0, 0, '1', 'user'),
+(5, 'Hasil Perhitungan', 'uri', 16, 'saw', 'ion ion-stats-bars', 'https://spk.kamil.co.id/user/saw', '', 2, 5, NULL, 0, 0, '1', 'user'),
+(6, 'Grafik Penilaian', 'uri', 17, 'grafik', 'ion ion-pie-graph', 'https://spk.kamil.co.id/user/grafik', '', 2, 6, NULL, 0, 0, '1', 'user'),
+(7, 'Laporan Ranking', 'uri', 18, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak', '', 2, 7, NULL, 0, 0, '1', 'user'),
+(8, 'Laporan SAW', 'uri', 19, 'saw', 'fa fa-print', 'https://spk.kamil.co.id/user/saw/cetak/lengkap', '', 2, 8, NULL, 0, 0, '1', 'user'),
+(9, 'Tahun Berkas', 'uri', 20, 'tahun', 'fa fa-file-text', 'https://spk.kamil.co.id/user/tahun', '', 2, 1, NULL, 0, 0, '1', 'user'),
+(10, 'Histori', 'uri', 21, 'histori', 'fa fa-file-text', 'https://spk.kamil.co.id/user/histori', '', 2, 9, NULL, 0, 0, '1', 'user');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `histori`
+--
+
+CREATE TABLE `histori` (
+  `h_id` int(11) NOT NULL,
+  `h_tgl` datetime DEFAULT NULL,
+  `h_before` longtext COLLATE utf8_unicode_ci,
+  `h_after` longtext COLLATE utf8_unicode_ci,
+  `h_table` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `h_tipe` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'insert/update/delete',
+  `h_user` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `histori`
+--
+
+INSERT INTO `histori` (`h_id`, `h_tgl`, `h_before`, `h_after`, `h_table`, `h_tipe`, `h_user`) VALUES
+(7, '2019-07-04 14:35:20', NULL, '[\"05\",\"Contoh\",\"alamat\",\"1201010\",\"0099393\",\"2020\"]', 'area', 'insert', 'admin'),
+(8, '2019-07-04 14:35:49', '[\"05\",\"Contoh\",\"alamat\",\"1201010\",\"0099393\",\"2020\"]', '[\"06\",\"Contoh 2\",\"\",\"466666\",\"32222\",\"2020\"]', 'area', 'delete', 'admin'),
+(9, '2019-07-04 14:36:37', NULL, '[\"06\",\"Contoh 2\",\"\",\"466666\",\"32222\",\"2020\"]', 'area', 'delete', 'admin'),
+(10, '2019-07-04 15:35:52', '[\"04\",\"it konsultan\",\"wong pinter\",\"\",\"\",\"2020\"]', '[\"04\",\"it konsultan\",\"wong pinter\",\"12222222\",\"\",\"2020\"]', 'area', 'update', 'admin'),
+(11, '2019-07-04 15:41:45', '[\"01\",\"programer\",\"android php\",\"12345678\",\"1213\",\"2020\"]', '[\"01\",\"programerrrrr\",\"android php\",\"12345678\",\"1213\",\"2020\"]', 'area', 'update', 'admin'),
+(12, '2019-07-04 15:42:23', '[\"01\",\"programerrrrr\",\"android php\",\"12345678\",\"1213\",\"2020\"]', '[\"01\",\"programerrrrr\",\"android \",\"12345678\",\"1213\",\"2020\"]', 'area', 'update', 'admin'),
+(13, '2019-07-04 16:01:58', '[\"k5\",\"gaji\",\"30\",\"2020\"]', '[\"K5\",\"gaji\",\"30\",\"2020\"]', 'kriteria', 'update', 'admin'),
+(24, '2019-07-04 17:56:41', '[\"01\",\"programerrrrr\",\"k1\",\"ipk\",\"4\"]', '[\"01\",\"programerrrrr\",\"k1\",\"ipk\",\"5\"]', 'penilaian', 'update', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kriteria`
+--
+
 CREATE TABLE `kriteria` (
   `k_kode` varchar(50) NOT NULL DEFAULT '',
   `k_nama` varchar(50) DEFAULT NULL,
   `k_bobot` int(10) DEFAULT NULL,
-  `id_tahun` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`k_kode`),
-  KEY `fk_k_id_tahun` (`id_tahun`),
-  CONSTRAINT `fk_k_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `id_tahun` varchar(4) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of kriteria
--- ----------------------------
-BEGIN;
-INSERT INTO `kriteria` VALUES ('C01', 'HSE Meeting', 3, '2019');
-INSERT INTO `kriteria` VALUES ('C02', 'HSE Talk/Briefing', 4, '2019');
-INSERT INTO `kriteria` VALUES ('C03', 'Inspeksi Lokasi Kerja', 3, '2019');
-INSERT INTO `kriteria` VALUES ('C04', 'Tindakan Perbaikan', 5, '2019');
-INSERT INTO `kriteria` VALUES ('C05', 'Pengawasan Pekerjaan', 5, '2019');
-INSERT INTO `kriteria` VALUES ('C06', 'Fire Drill', 5, '2019');
-INSERT INTO `kriteria` VALUES ('C07', 'Simulasi Tanggap Darurat', 3, '2019');
-INSERT INTO `kriteria` VALUES ('C08', 'Inspeksi Peralatan Gas Detection, fire and safety', 3, '2019');
-INSERT INTO `kriteria` VALUES ('C09', 'HSE Leasson Learned Sharing', 4, '2019');
-INSERT INTO `kriteria` VALUES ('C10', 'Managemen Walk Trought', 4, '2019');
-COMMIT;
+--
+-- Dumping data for table `kriteria`
+--
 
--- ----------------------------
--- Table structure for penilaian
--- ----------------------------
-DROP TABLE IF EXISTS `penilaian`;
+INSERT INTO `kriteria` (`k_kode`, `k_nama`, `k_bobot`, `id_tahun`) VALUES
+('k1', 'ipk', 30, '2020'),
+('k2', 'pemahaman bahasa pemrograman', 20, '2020'),
+('k3', 'pengalaman membuat aplikasi', 10, '2020'),
+('k4', 'sertifikasi', 10, '2020'),
+('K5', 'gaji', 30, '2020');
+
+--
+-- Triggers `kriteria`
+--
+DELIMITER $$
+CREATE TRIGGER `after_kriteria_delete` AFTER DELETE ON `kriteria` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="kriteria",h_tipe="delete", h_user=@user_id,h_after=CONCAT("["",old.k_kode,"","",old.k_nama,"","",old.k_bobot,"","",old.id_tahun,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_kriteria_insert` AFTER INSERT ON `kriteria` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="kriteria",h_tipe="insert", h_user=@user_id,h_after=CONCAT("["",new.k_kode,"","",new.k_nama,"","",new.k_bobot,"","",new.id_tahun,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_kriteria_update` AFTER UPDATE ON `kriteria` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="kriteria",h_tipe="update", h_user=@user_id,h_after=CONCAT("["",new.k_kode,"","",new.k_nama,"","",new.k_bobot,"","",new.id_tahun,""]"),h_before=CONCAT("["",old.k_kode,"","",old.k_nama,"","",old.k_bobot,"","",old.id_tahun,""]")
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `penilaian`
+--
+
 CREATE TABLE `penilaian` (
-  `pn_id` int(100) NOT NULL AUTO_INCREMENT,
+  `pn_id` int(100) NOT NULL,
   `id_area` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `id_kriteria` varchar(50) CHARACTER SET utf8 DEFAULT NULL,
-  `pn_nilai` int(50) DEFAULT NULL,
-  PRIMARY KEY (`pn_id`),
-  KEY `pn_id_area` (`id_area`),
-  KEY `pn_id_kriteria` (`id_kriteria`),
-  CONSTRAINT `pn_id_area` FOREIGN KEY (`id_area`) REFERENCES `area` (`a_kode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `pn_id_kriteria` FOREIGN KEY (`id_kriteria`) REFERENCES `kriteria` (`k_kode`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of penilaian
--- ----------------------------
-BEGIN;
-INSERT INTO `penilaian` VALUES (1, '001', 'C01', 3);
-INSERT INTO `penilaian` VALUES (2, '001', 'C02', 4);
-INSERT INTO `penilaian` VALUES (3, '001', 'C03', 4);
-INSERT INTO `penilaian` VALUES (4, '001', 'C04', 3);
-INSERT INTO `penilaian` VALUES (15, '002', 'C01', 5);
-INSERT INTO `penilaian` VALUES (16, '002', 'C02', 3);
-INSERT INTO `penilaian` VALUES (17, '002', 'C03', 4);
-INSERT INTO `penilaian` VALUES (18, '002', 'C04', 5);
-INSERT INTO `penilaian` VALUES (29, '003', 'C01', 4);
-INSERT INTO `penilaian` VALUES (30, '003', 'C02', 5);
-INSERT INTO `penilaian` VALUES (31, '003', 'C03', 5);
-INSERT INTO `penilaian` VALUES (32, '003', 'C04', 3);
-INSERT INTO `penilaian` VALUES (43, '004', 'C01', 4);
-INSERT INTO `penilaian` VALUES (44, '004', 'C02', 5);
-INSERT INTO `penilaian` VALUES (45, '004', 'C03', 4);
-INSERT INTO `penilaian` VALUES (46, '004', 'C04', 1);
-INSERT INTO `penilaian` VALUES (57, '005', 'C01', 3);
-INSERT INTO `penilaian` VALUES (58, '005', 'C02', 4);
-INSERT INTO `penilaian` VALUES (59, '005', 'C03', 5);
-INSERT INTO `penilaian` VALUES (60, '005', 'C04', 5);
-INSERT INTO `penilaian` VALUES (71, '006', 'C01', 0);
-INSERT INTO `penilaian` VALUES (72, '006', 'C02', 0);
-INSERT INTO `penilaian` VALUES (73, '006', 'C03', 0);
-INSERT INTO `penilaian` VALUES (74, '006', 'C04', 0);
-INSERT INTO `penilaian` VALUES (75, '001', 'C05', 5);
-INSERT INTO `penilaian` VALUES (76, '001', 'C06', 3);
-INSERT INTO `penilaian` VALUES (77, '001', 'C07', 4);
-INSERT INTO `penilaian` VALUES (78, '001', 'C08', 5);
-INSERT INTO `penilaian` VALUES (79, '001', 'C09', 5);
-INSERT INTO `penilaian` VALUES (80, '001', 'C10', 2);
-INSERT INTO `penilaian` VALUES (81, '002', 'C05', 3);
-INSERT INTO `penilaian` VALUES (82, '002', 'C06', 3);
-INSERT INTO `penilaian` VALUES (83, '002', 'C07', 5);
-INSERT INTO `penilaian` VALUES (84, '002', 'C08', 4);
-INSERT INTO `penilaian` VALUES (85, '002', 'C09', 4);
-INSERT INTO `penilaian` VALUES (86, '002', 'C10', 3);
-INSERT INTO `penilaian` VALUES (87, '003', 'C05', 2);
-INSERT INTO `penilaian` VALUES (88, '003', 'C06', 3);
-INSERT INTO `penilaian` VALUES (89, '003', 'C07', 4);
-INSERT INTO `penilaian` VALUES (90, '003', 'C08', 5);
-INSERT INTO `penilaian` VALUES (91, '003', 'C09', 5);
-INSERT INTO `penilaian` VALUES (92, '003', 'C10', 3);
-INSERT INTO `penilaian` VALUES (93, '004', 'C05', 4);
-INSERT INTO `penilaian` VALUES (94, '004', 'C06', 1);
-INSERT INTO `penilaian` VALUES (95, '004', 'C07', 4);
-INSERT INTO `penilaian` VALUES (96, '004', 'C08', 5);
-INSERT INTO `penilaian` VALUES (97, '004', 'C09', 2);
-INSERT INTO `penilaian` VALUES (98, '004', 'C10', 1);
-INSERT INTO `penilaian` VALUES (99, '005', 'C05', 5);
-INSERT INTO `penilaian` VALUES (100, '005', 'C06', 4);
-INSERT INTO `penilaian` VALUES (101, '005', 'C07', 3);
-INSERT INTO `penilaian` VALUES (102, '005', 'C08', 5);
-INSERT INTO `penilaian` VALUES (103, '005', 'C09', 3);
-INSERT INTO `penilaian` VALUES (104, '005', 'C10', 5);
-INSERT INTO `penilaian` VALUES (105, '006', 'C05', 0);
-INSERT INTO `penilaian` VALUES (106, '006', 'C06', 0);
-INSERT INTO `penilaian` VALUES (107, '006', 'C07', 0);
-INSERT INTO `penilaian` VALUES (108, '006', 'C08', 0);
-INSERT INTO `penilaian` VALUES (109, '006', 'C09', 0);
-INSERT INTO `penilaian` VALUES (110, '006', 'C10', 0);
-COMMIT;
-
--- ----------------------------
--- Table structure for tahun_berkas
--- ----------------------------
-DROP TABLE IF EXISTS `tahun_berkas`;
-CREATE TABLE `tahun_berkas` (
-  `thn_id` varchar(4) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `thn_status` int(1) DEFAULT NULL,
-  PRIMARY KEY (`thn_id`)
+  `pn_nilai` int(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- ----------------------------
--- Records of tahun_berkas
--- ----------------------------
-BEGIN;
-INSERT INTO `tahun_berkas` VALUES ('2019', 1);
-INSERT INTO `tahun_berkas` VALUES ('2020', 0);
-COMMIT;
+--
+-- Dumping data for table `penilaian`
+--
 
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
+INSERT INTO `penilaian` (`pn_id`, `id_area`, `id_kriteria`, `pn_nilai`) VALUES
+(1, '01', 'k1', 5),
+(2, '01', 'k2', 80),
+(3, '01', 'k3', 1),
+(4, '01', 'k4', 90),
+(5, '01', 'K5', 10),
+(6, '02', 'k1', 3),
+(7, '02', 'k2', 90),
+(8, '02', 'k3', 2),
+(9, '02', 'k4', 1),
+(10, '02', 'K5', 10);
+
+--
+-- Triggers `penilaian`
+--
+DELIMITER $$
+CREATE TRIGGER `after_nilai_delete` AFTER DELETE ON `penilaian` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="penilaian",h_tipe="delete", h_user=@user_id,h_after=CONCAT("["",old.id_area,"","",@a_nama_a,"","",old.id_kriteria,"","",@k_nama_a,"","",old.pn_nilai,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_nilai_insert` AFTER INSERT ON `penilaian` FOR EACH ROW INSERT INTO histori SET h_tgl=NOW(), h_table="penilaian",h_tipe="insert", h_user=@user_id,h_after=CONCAT("["",new.id_area,"","",@a_nama_a,"","",new.id_kriteria,"","",@k_nama_a,"","",new.pn_nilai,""]")
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_nilai_update` AFTER UPDATE ON `penilaian` FOR EACH ROW IF (old.id_area = new.id_area AND old.id_kriteria = new.id_kriteria AND old.pn_nilai = new.pn_nilai) = false  THEN 
+BEGIN INSERT INTO histori SET h_tgl=NOW(), h_table="penilaian",h_tipe="update", h_user=@user_id,h_after=CONCAT("["",new.id_area,"","",@a_nama_a,"","",new.id_kriteria,"","",@k_nama_a,"","",new.pn_nilai,""]"),h_before=CONCAT("["",old.id_area,"","",@a_nama_b,"","",old.id_kriteria,"","",@k_nama_b,"","",old.pn_nilai,""]"); END;
+END IF
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tahun_berkas`
+--
+
+CREATE TABLE `tahun_berkas` (
+  `thn_id` varchar(4) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `thn_status` int(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `tahun_berkas`
+--
+
+INSERT INTO `tahun_berkas` (`thn_id`, `thn_status`) VALUES
+('2020', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
 CREATE TABLE `user` (
-  `u_id` int(100) NOT NULL AUTO_INCREMENT,
+  `u_id` int(100) NOT NULL,
   `u_name` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `u_email` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
   `u_password` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `u_status` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `u_role` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`u_id`) USING BTREE,
-  UNIQUE KEY `u_ibfk1_username` (`u_name`) USING BTREE,
-  UNIQUE KEY `u_ibfk2_email` (`u_email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `u_role` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- ----------------------------
--- Records of user
--- ----------------------------
-BEGIN;
-INSERT INTO `user` VALUES (3, 'admin', 'admin@gmail.com', 'd033e22ae348aeb5660fc2140aec35850c4da997', '1', 'user');
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`u_id`, `u_name`, `u_email`, `u_password`, `u_status`, `u_role`) VALUES
+(3, 'admin', 'admin@gmail.com', 'd033e22ae348aeb5660fc2140aec35850c4da997', '1', 'user');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `area`
+--
+ALTER TABLE `area`
+  ADD PRIMARY KEY (`a_kode`),
+  ADD KEY `fk_a_id_tahun` (`id_tahun`);
+
+--
+-- Indexes for table `dyn_groups`
+--
+ALTER TABLE `dyn_groups`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indexes for table `dyn_menu`
+--
+ALTER TABLE `dyn_menu`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Indexes for table `histori`
+--
+ALTER TABLE `histori`
+  ADD PRIMARY KEY (`h_id`);
+
+--
+-- Indexes for table `kriteria`
+--
+ALTER TABLE `kriteria`
+  ADD PRIMARY KEY (`k_kode`),
+  ADD KEY `fk_k_id_tahun` (`id_tahun`);
+
+--
+-- Indexes for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD PRIMARY KEY (`pn_id`),
+  ADD KEY `pn_id_area` (`id_area`),
+  ADD KEY `pn_id_kriteria` (`id_kriteria`);
+
+--
+-- Indexes for table `tahun_berkas`
+--
+ALTER TABLE `tahun_berkas`
+  ADD PRIMARY KEY (`thn_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`u_id`) USING BTREE,
+  ADD UNIQUE KEY `u_ibfk1_username` (`u_name`) USING BTREE,
+  ADD UNIQUE KEY `u_ibfk2_email` (`u_email`) USING BTREE;
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `dyn_groups`
+--
+ALTER TABLE `dyn_groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `dyn_menu`
+--
+ALTER TABLE `dyn_menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `histori`
+--
+ALTER TABLE `histori`
+  MODIFY `h_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  MODIFY `pn_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `u_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `area`
+--
+ALTER TABLE `area`
+  ADD CONSTRAINT `fk_a_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `kriteria`
+--
+ALTER TABLE `kriteria`
+  ADD CONSTRAINT `fk_k_id_tahun` FOREIGN KEY (`id_tahun`) REFERENCES `tahun_berkas` (`thn_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `penilaian`
+--
+ALTER TABLE `penilaian`
+  ADD CONSTRAINT `pn_id_area` FOREIGN KEY (`id_area`) REFERENCES `area` (`a_kode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pn_id_kriteria` FOREIGN KEY (`id_kriteria`) REFERENCES `kriteria` (`k_kode`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
-SET FOREIGN_KEY_CHECKS = 1;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

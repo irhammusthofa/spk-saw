@@ -2,6 +2,11 @@
 
 class M_penilaian extends CI_Model
 {
+    public function __construct(){
+        parent::__construct();
+        $this->load->model('m_kriteria');
+        $this->load->model('m_area');
+    }
     public function penilaian_by_area($id){
         return $this->db->from('kriteria k')
             ->join('penilaian p','p.id_kriteria=k.k_kode and p.id_area="'.$id.'"','left')
@@ -25,7 +30,15 @@ class M_penilaian extends CI_Model
             ->join('penilaian p','p.id_kriteria=k.k_kode','left')
             ->get();
     }
+    public function by_id($id){
+        return $this->db->from('penilaian p')
+            ->join('area a','a.a_kode=p.id_area','inner')
+            ->join('kriteria k','k.k_kode=p.id_kriteria','inner')
+            ->where('p.pn_id',$id)
+            ->get();
+    }
     public function save($id){
+
         $kriteria = $this->penilaian_by_area($id)->result();
         $this->db->trans_begin();
         foreach ($kriteria as $item) {
@@ -51,9 +64,27 @@ class M_penilaian extends CI_Model
         return $this->db->trans_status();
     }
     public function insert($data){
+        
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
+        $area = $this->m_area->by_id($data['id_area'])->row();
+        $kriteria = $this->m_kriteria->by_id($data['id_kriteria'])->row();
+        $this->db->query('SET @a_nama_a="'.$area->a_nama.'"');
+        $this->db->query('SET @k_nama_a="'.$kriteria->k_nama.'"');
+
         return $this->db->insert('penilaian',$data);
     }
     public function update($id,$data){
+
+        $this->db->query('SET @user_id="'.$this->user->u_name.'"');
+        $old = $this->by_id($id)->row();
+        $area = $this->m_area->by_id($data['id_area'])->row();
+        $kriteria = $this->m_kriteria->by_id($data['id_kriteria'])->row();
+        $this->db->query('SET @a_nama_a="'.$area->a_nama.'"');
+        $this->db->query('SET @k_nama_a="'.$kriteria->k_nama.'"');
+        
+        $this->db->query('SET @a_nama_b="'.$old->a_nama.'"');
+        $this->db->query('SET @k_nama_b="'.$old->k_nama.'"');
+
         return $this->db->where('pn_id',$id)->update('penilaian',$data);
     }
 }

@@ -91,3 +91,5 @@ $route['user/tahun/hapus/(:any)'] = 'tahun/delete/$1';
 $route['user/tahun/simpan'] = 'tahun/save';
 $route['user/tahun/update/(:any)'] = 'tahun/update/$1';
 
+
+$route['user/histori']         = 'histori';
