@@ -87,4 +87,244 @@ class M_penilaian extends CI_Model
 
         return $this->db->where('pn_id',$id)->update('penilaian',$data);
     }
+
+    public function kriteria_reference($kriteria,$alternatif){
+        foreach ($kriteria as $item) {
+            $bobot = $this->get_bobot($item,$alternatif);
+            $pembagi = $this->get_pembagi($item,$alternatif);
+            $kriteria_reference[] = array(
+                'kode'          => $item,
+                'data'          => array(
+                    'c/b'       => ($bobot<2) ? 'COST' : 'BENEFIT',
+                    'bobot'     => $bobot,
+                    'pembagi'   => $pembagi,
+                ),
+            );
+        }
+        return $kriteria_reference;
+    }
+    public function rata2_kriteria($alternatif,$kriteria){
+        //$count = count($this->list_sub_kriteria($kriteria)->result());
+        $sum = $this->db->select('sum(pn_nilai) AS nilai')
+            ->from('penilaian p')
+            ->join('kriteria k','k.k_kode=p.id_kriteria','inner')
+            ->where('p.id_area',$alternatif)
+            ->where('k.k_kode',$kriteria)
+            ->get()->row()->nilai;
+        //if ($sum==0) return 0;
+        return $sum;
+    }
+    private function get_bobot($kode_kriteria,$alternatif){
+        //$tim_saya =  $this->m_cip->by_id($kode)->row();
+        //$tim   = $this->m_cip->by_jenis($tim_saya->id_jenis)->result();
+        //$tim   = $this->m_cip->all()->result();
+        //$kriteria = $this->m_kriteria->by_id($kode_kriteria)->row();
+        //return $kriteria->kp_nilai_kriteria;
+
+        $bobot      = [];
+        foreach ($alternatif as $item) {
+            $rata2 = $this->rata2_kriteria($item,$kode_kriteria);
+            $bobot[]    = array('nilai'=>$rata2);
+        }
+        $tmp = 0;
+        foreach ($bobot as $val) {
+            $tmp += $val['nilai'];
+        }
+        if ($tmp==0) return 0;
+        return $tmp/count($alternatif);
+    }
+    private function get_pembagi($kode_kriteria,$alternatif){
+        //$tim_saya =  $this->m_cip->by_id($kode)->row();
+        //$tim   = $this->m_cip->by_jenis($tim_saya->id_jenis)->result();
+        //$tim   = $this->m_cip->all()->result();
+        $bobot      = [];
+        foreach ($alternatif as $item) {
+            $rata2 = $this->rata2_kriteria($item,$kode_kriteria);
+            $bobot[]    = array('nilai'=>$rata2);
+        }
+        $tmp = 0;
+        foreach ($bobot as $val) {
+            $tmp += ($val['nilai']*$val['nilai']);
+        }
+        return sqrt($tmp);
+    }
+    public function ternormalisasi($kriteria,$alternatif,$kriteria_reference){
+
+        //$kriteria       = $this->list_kriteria()->result();
+        //$alternatif     = $this->alternatif()->result();
+        $alternatif_reference = [];
+        foreach ($alternatif as $val) {
+            $data = "";
+            foreach ($kriteria as $val_k) {
+                $nilai              = 0;
+                $ref_kriteria       = $this->find_refkriteria($kriteria_reference,$val_k);
+                $pembagi            = $ref_kriteria['data']['pembagi'];
+                $nilai              = $this->get_nilai($val,$val_k);
+                // if ($nilai==0){
+                //     $ternormalisasi     = 0;
+                // }else{
+                //     $ternormalisasi     = $nilai/$pembagi;
+                // }
+                
+                if ($nilai!=0){
+                    $ternormalisasi     = $nilai/$pembagi;  
+                }else{
+                    $ternormalisasi     = 0;
+                }
+
+                $bobot              = $ref_kriteria['data']['bobot'];
+
+                $alternatif_reference[] = array(
+                    'id_cip'        => $val,
+                    'kriteria'      => $val_k,
+                    'nilai'         => $nilai,
+                    'ternormalisasi'=> $ternormalisasi,
+                    'terbobot'      => $ternormalisasi * $bobot,
+                );
+            }
+            
+        }
+        return $alternatif_reference;
+    }
+    private function alternatif(){
+        return $this->db->select('id_cip')
+            ->from('penilaian')
+            ->group_by('id_cip')
+            ->get();
+    }
+
+    private function find_refkriteria($source,$kriteria){
+        for($i=0;$i<count($source);$i++){
+            if ($kriteria==$source[$i]['kode']){
+                return $source[$i];
+            }
+        }
+        return FALSE;
+    }
+
+    private function get_nilai($cip,$kode){
+        $nilai          = $this->rata2_kriteria($cip,$kode);
+        if ($nilai==0) return 0;
+        return $nilai;
+    }
+    public function ideal($kriteria,$kriteria_reference,$alternatif_reference){
+
+        foreach ($kriteria as $item) {
+            $ref_kriteria       = $this->find_refkriteria($kriteria_reference,$item);
+            $cb                 = $ref_kriteria['data']['c/b'];
+            $ref_terbobot       = $this->find_refterbobot($alternatif_reference,$item,'kriteria');
+            if ($cb=='BENEFIT'){
+                $a_plus = max($ref_terbobot);
+                $a_min  = min($ref_terbobot);
+            }else{
+                $a_plus = min($ref_terbobot);
+                $a_min  = max($ref_terbobot);
+            }
+            $tab_ideal[] = array(
+                'kriteria'  => $item,
+                'a_plus'    => $a_plus,
+                'a_min'     => $a_min,
+            );
+        }
+        return $tab_ideal;
+    }
+    private function find_refterbobot_kriteria($source,$id_cip,$key,$kriteria){
+        $tmp = "";
+        for($i=0;$i<count($source);$i++){
+            if ($id_cip==$source[$i][$key] && $kriteria==$source[$i]['kriteria']){
+                return $source[$i]['terbobot'];
+            }
+        }
+        return 0;
+    }
+    private function find_refterbobot($source,$kriteria,$key){
+        $tmp = [];
+        for($i=0;$i<count($source);$i++){
+            if ($kriteria==$source[$i][$key]){
+                $tmp[] = $source[$i]['terbobot'];
+            }
+        }
+        return $tmp;
+    }
+    public function relative_closeness($id_cip,$kriteria,$alternatif){
+        $array = $this->get_relative_closeness($kriteria,$alternatif);
+        for($i=0;$i<count($array);$i++){
+            if (@$array[$i]['id_cip']==$id_cip){
+                $relative_closeness = array(
+                    'id_cip'   => $id_cip,
+                    's_plus'        => $array[$i]['s_plus'],
+                    's_min'         => $array[$i]['s_min'],
+                    'rc'            => $array[$i]['rc']
+                );
+                return $relative_closeness;
+            }
+        }
+        $relative_closeness = array(
+            'id_cip'   => $id_cip,
+            's_plus'        => 0,
+            's_min'         => 0,
+            'rc'            => 0
+        );
+        return $relative_closeness;
+    }
+
+    private function get_relative_closeness($kriteria,$alternatif){
+        //$kriteria       = $this->list_kriteria()->result();
+        $count_kriteria = count($kriteria);
+        //$alternatif     = $this->alternatif($month,$year)->result();
+        $count_alternatif = count($alternatif);
+        if ($count_alternatif<=0 || $count_kriteria <=0){
+            $relative_closeness = array(
+                's_plus'        => 0,
+                's_min'         => 0,
+                'rc'            => 0
+            );
+            return $relative_closeness;
+        }
+        $kriteria_reference = $this->kriteria_reference($kriteria,$alternatif);
+        $alternatif_reference = $this->ternormalisasi($kriteria,$alternatif,$kriteria_reference);
+        
+        $tab_ideal = $this->ideal($kriteria,$kriteria_reference,$alternatif_reference);
+        
+        $relative_closeness = [];
+        foreach ($alternatif as $val) {
+            $s_plus = 0;
+            $s_min  = 0;
+            foreach ($tab_ideal as $tab) {
+                $ref_terbobot       = $this->find_refterbobot_kriteria($alternatif_reference,$val,'id_cip',$tab['kriteria']);
+                $s_plus += ($tab['a_plus']-$ref_terbobot)*($tab['a_plus']-$ref_terbobot);
+                $s_min += (($tab['a_min']-$ref_terbobot)*($tab['a_min']-$ref_terbobot));
+            }
+            $s_plus = sqrt($s_plus);
+            $s_min = sqrt($s_min);
+
+            $relative_closeness[] = array(
+                'id_cip'        => $val,
+                's_plus'        => $s_plus,
+                's_min'         => $s_min,
+                'rc'            => ($s_min!=0) ? $s_min / ($s_min+$s_plus) : 0,
+            );
+            
+        }
+        return $relative_closeness;
+        
+    }
+    public function rangking($id_cip,$kriteria,$alternatif){
+        $array = $this->get_relative_closeness($kriteria,$alternatif);
+        $rank   = [];
+        for($i=0;$i<count($array);$i++){
+            $rank[] = array(
+                'rc'            => @$array[$i]['rc'],
+                'id_cip'   => @$array[$i]['id_cip'],
+            );
+        }
+        arsort($rank);
+        $i = 0;
+        foreach ($rank as $val) {
+            $i++;
+            if ($val['id_cip']==$id_cip){
+                return $i;
+            }
+        }
+    }
 }

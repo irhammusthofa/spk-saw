@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                   <td>Bobot</td>
-                  <td id="b_alamat_kriteria"></td>
+                  <td id="b_bobot_kriteria"></td>
                 </tr>
                 <tr>
                   <td>Tahun</td>
@@ -51,7 +51,7 @@
                 </tr>
                 <tr>
                   <td>Bobot</td>
-                  <td id="a_alamat_kriteria"></td>
+                  <td id="a_bobot_kriteria"></td>
                 </tr>
                 <tr>
                   <td>Tahun</td>

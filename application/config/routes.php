@@ -82,6 +82,11 @@ $route['user/saw']         = 'saw';
 $route['user/saw/cetak']         = 'saw/cetak';
 $route['user/saw/cetak/lengkap']         = 'saw/cetak_lengkap';
 $route['user/grafik']         = 'grafik';
+$route['user/grafik/topsis']         = 'grafik/index2';
+
+$route['user/topsis']         = 'topsis';
+$route['user/topsis/cetak']         = 'topsis/cetak';
+$route['user/topsis/cetak/lengkap']         = 'topsis/cetak_lengkap';
 
 $route['user/tahun'] = 'tahun/index';
 $route['user/tahun/changetahun/(:any)/(:any)'] = 'tahun/changetahun/$1/$2';
