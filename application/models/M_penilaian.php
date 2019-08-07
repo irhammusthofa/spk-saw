@@ -115,23 +115,23 @@ class M_penilaian extends CI_Model
         return $sum;
     }
     private function get_bobot($kode_kriteria,$alternatif){
-        //$tim_saya =  $this->m_cip->by_id($kode)->row();
-        //$tim   = $this->m_cip->by_jenis($tim_saya->id_jenis)->result();
-        //$tim   = $this->m_cip->all()->result();
-        //$kriteria = $this->m_kriteria->by_id($kode_kriteria)->row();
-        //return $kriteria->kp_nilai_kriteria;
+        // $tim_saya =  $this->m_cip->by_id($kode)->row();
+        // $tim   = $this->m_cip->by_jenis($tim_saya->id_jenis)->result();
+        // $tim   = $this->m_cip->all()->result();
+        $kriteria = $this->m_kriteria->by_id($kode_kriteria)->row();
+        return $kriteria->k_bobot;
 
-        $bobot      = [];
-        foreach ($alternatif as $item) {
-            $rata2 = $this->rata2_kriteria($item,$kode_kriteria);
-            $bobot[]    = array('nilai'=>$rata2);
-        }
-        $tmp = 0;
-        foreach ($bobot as $val) {
-            $tmp += $val['nilai'];
-        }
-        if ($tmp==0) return 0;
-        return $tmp/count($alternatif);
+        // $bobot      = [];
+        // foreach ($alternatif as $item) {
+        //     $rata2 = $this->rata2_kriteria($item,$kode_kriteria);
+        //     $bobot[]    = array('nilai'=>$rata2);
+        // }
+        // $tmp = 0;
+        // foreach ($bobot as $val) {
+        //     $tmp += $val['nilai'];
+        // }
+        // if ($tmp==0) return 0;
+        // return $tmp/count($alternatif);
     }
     private function get_pembagi($kode_kriteria,$alternatif){
         //$tim_saya =  $this->m_cip->by_id($kode)->row();
