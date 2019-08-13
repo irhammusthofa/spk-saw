@@ -98,3 +98,6 @@ $route['user/tahun/update/(:any)'] = 'tahun/update/$1';
 
 
 $route['user/histori']         = 'histori';
+
+$route['user/perbandingan']         = 'perbandingan';
+$route['user/sensitifitas']         = 'sensitifitas';
