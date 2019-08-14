@@ -88,9 +88,9 @@ class M_penilaian extends CI_Model
         return $this->db->where('pn_id',$id)->update('penilaian',$data);
     }
 
-    public function kriteria_reference($kriteria,$alternatif){
+    public function kriteria_reference($kriteria,$alternatif,$kode_kriteria=''){
         foreach ($kriteria as $item) {
-            $bobot = $this->get_bobot($item,$alternatif);
+            $bobot = $this->get_bobot($item,$alternatif,$kode_kriteria);
             $pembagi = $this->get_pembagi($item,$alternatif);
             $kriteria_reference[] = array(
                 'kode'          => $item,
@@ -114,12 +114,17 @@ class M_penilaian extends CI_Model
         //if ($sum==0) return 0;
         return $sum;
     }
-    private function get_bobot($kode_kriteria,$alternatif){
+    private function get_bobot($kode_kriteria,$alternatif,$kode_kriteria_uji=''){
         // $tim_saya =  $this->m_cip->by_id($kode)->row();
         // $tim   = $this->m_cip->by_jenis($tim_saya->id_jenis)->result();
         // $tim   = $this->m_cip->all()->result();
         $kriteria = $this->m_kriteria->by_id($kode_kriteria)->row();
-        return $kriteria->k_bobot;
+        if ($kode_kriteria_uji==$kriteria->k_kode){
+            return $kriteria->k_bobot + 0.5;
+        }else{
+            return $kriteria->k_bobot;    
+        }
+        
 
         // $bobot      = [];
         // foreach ($alternatif as $item) {
@@ -246,8 +251,8 @@ class M_penilaian extends CI_Model
         }
         return $tmp;
     }
-    public function relative_closeness($id_cip,$kriteria,$alternatif){
-        $array = $this->get_relative_closeness($kriteria,$alternatif);
+    public function relative_closeness($id_cip,$kriteria,$alternatif,$kode_kriteria=''){
+        $array = $this->get_relative_closeness($kriteria,$alternatif,$kode_kriteria);
         for($i=0;$i<count($array);$i++){
             if (@$array[$i]['id_cip']==$id_cip){
                 $relative_closeness = array(
@@ -268,7 +273,7 @@ class M_penilaian extends CI_Model
         return $relative_closeness;
     }
 
-    private function get_relative_closeness($kriteria,$alternatif){
+    private function get_relative_closeness($kriteria,$alternatif,$kode_kriteria=''){
         //$kriteria       = $this->list_kriteria()->result();
         $count_kriteria = count($kriteria);
         //$alternatif     = $this->alternatif($month,$year)->result();
@@ -281,7 +286,7 @@ class M_penilaian extends CI_Model
             );
             return $relative_closeness;
         }
-        $kriteria_reference = $this->kriteria_reference($kriteria,$alternatif);
+        $kriteria_reference = $this->kriteria_reference($kriteria,$alternatif,$kode_kriteria);
         $alternatif_reference = $this->ternormalisasi($kriteria,$alternatif,$kriteria_reference);
         
         $tab_ideal = $this->ideal($kriteria,$kriteria_reference,$alternatif_reference);
