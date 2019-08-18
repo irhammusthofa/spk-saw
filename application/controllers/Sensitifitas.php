@@ -37,7 +37,7 @@ class Sensitifitas extends User_Controller
 				
 				if (!empty($nilai)){
 					$tmp_val = $nilai->pn_nilai/5;
-					$tmp_val = $tmp_val * $kriteria->k_bobot;
+					$tmp_val = $tmp_val * ($kriteria->k_bobot/100);
 					$val = $val + $tmp_val;
 				}
 			}
@@ -65,9 +65,9 @@ class Sensitifitas extends User_Controller
 					if (!empty($nilai)){
 						$tmp_val = $nilai->pn_nilai/5;
 						if ($k->k_kode==$kriteria->k_kode){
-							$tmp_val = $tmp_val * ($kriteria->k_bobot+0.5);	
+							$tmp_val = $tmp_val * (($kriteria->k_bobot/100)+0.5);	
 						}else{
-							$tmp_val = $tmp_val * $kriteria->k_bobot;
+							$tmp_val = $tmp_val * ($kriteria->k_bobot/100);
 						}
 						
 						$val = $val + $tmp_val;
@@ -83,7 +83,7 @@ class Sensitifitas extends User_Controller
 			$sensitifitas['K'.$i] = array('data'=>$alternatif,'max'=>$max,'perubahan'=>round($perubahan,2));
 			$presentase['K'.$i] = round($perubahan,2);
 			$jumlah_presentase += round($perubahan,2);
-			$max_awal = $max;
+			//$max_awal = $max;
 		}
 		$sensitifitas['presentase'] = array('data'=>$presentase,'jumlah'=>$jumlah_presentase);
 		$data['sensitifitas'] = $sensitifitas;
@@ -137,7 +137,7 @@ class Sensitifitas extends User_Controller
 				$topsis_alternatif[$area->a_kode] = $nilai;
 			}
 			$perubahan = $max-$max_awal;
-			$max_awal = $max;
+			//$max_awal = $max;
 			$sensitifitas_topsis['K'.$i] = array('data'=>$topsis_alternatif,'max'=>$max,'perubahan'=>round($perubahan,4));
 			$presentase_topsis['K'.$i] = round($perubahan,4);
 			$jumlah_presentase_topsis += round($perubahan,4);

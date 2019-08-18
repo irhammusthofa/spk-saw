@@ -95,7 +95,7 @@ class M_penilaian extends CI_Model
             $kriteria_reference[] = array(
                 'kode'          => $item,
                 'data'          => array(
-                    'c/b'       => ($bobot<2) ? 'COST' : 'BENEFIT',
+                    'c/b'       => 'BENEFIT',//($bobot<2) ? 'COST' : 'BENEFIT',
                     'bobot'     => $bobot,
                     'pembagi'   => $pembagi,
                 ),
@@ -120,9 +120,9 @@ class M_penilaian extends CI_Model
         // $tim   = $this->m_cip->all()->result();
         $kriteria = $this->m_kriteria->by_id($kode_kriteria)->row();
         if ($kode_kriteria_uji==$kriteria->k_kode){
-            return $kriteria->k_bobot + 0.5;
+            return ($kriteria->k_bobot/100) + 0.5;
         }else{
-            return $kriteria->k_bobot;    
+            return $kriteria->k_bobot/100;    
         }
         
 
