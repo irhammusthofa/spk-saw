@@ -71,6 +71,7 @@
                         echo '<td><b>Jumlah</b></td>';
                         echo '<td><b>'.$data['sensitifitas'][$key]['jumlah'].'</b></td>';
                         echo '</tr>';
+                        $jml_saw = $data['sensitifitas'][$key]['jumlah'];
                       }
 
                   echo '</table>' ?>
@@ -145,6 +146,7 @@
                         echo '<td><b>Jumlah</b></td>';
                         echo '<td><b>'.$data['sensitifitas_topsis'][$key]['jumlah'].'</b></td>';
                         echo '</tr>';
+                        $jml_topsis = $data['sensitifitas_topsis'][$key]['jumlah'];
                       }
 
                   echo '</table>' ?>
@@ -161,6 +163,6 @@
       </div>
     </div>
     <!-- /.box -->
-
+    <div class="alert alert-success">Sesuai dengan hasil perbandingan dengan uji sensitifitas maka sistem merekomendasikan metode yang digunakan adalah <?= ($jml_topsis > $jml_saw) ? 'Topsis' : 'SAW' ?>, karena memiliki presentase sebesar <?= ($jml_topsis > $jml_saw) ? $jml_topsis : $jml_saw ?></div>
   </section>
   <!-- /.content -->

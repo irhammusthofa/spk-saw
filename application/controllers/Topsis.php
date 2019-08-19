@@ -43,5 +43,30 @@ class Topsis extends User_Controller
 		);
 		$this->template($param);
 	}
+	public function cetak(){
+        $data['kriteria'] 			= $this->m_kriteria->all()->result();
+        $data['area'] 				= $this->m_area->all()->result();
+        $tmp_kriteria 	= [];
+		foreach ($data['kriteria'] as $item) {
+			$tmp_kriteria[] = $item->k_kode;
+		}
+		$kriteria = $tmp_kriteria;
+    	
+    	$alternatif 	= [];
+		foreach ($data['area'] as $item) {
+			$alternatif[] = $item->a_kode;
+		}
+
+    	$data['kriteria-reference'] = $this->m_penilaian->kriteria_reference($kriteria,$alternatif);
+		$data['ternormalisasi'] 	= $this->m_penilaian->ternormalisasi($kriteria,$alternatif,$data['kriteria-reference']);
+		$data['ideal'] 				= $this->m_penilaian->ideal($kriteria,$data['kriteria-reference'],$data['ternormalisasi']);
+
+		$data['alternatif']			= $alternatif;
+		$data['kriteria'] 			= $kriteria;
+		$param = array(
+            'data' => $data,
+		);
+		$this->load->view('penilaian/topsis_cetak',$param);
+	}
 }
 
