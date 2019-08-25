@@ -119,5 +119,5 @@ $route['user/juri/pembagiantim/hapus/(:any)/(:any)']     = 'pembagiantim/delete/
 
 
 $route['juri/penilaian']         = 'penilaianjuri';
-$route['juri/penilaian/simpan/(:any)']     = 'penilaianjuri/save/$1';
+$route['juri/penilaian/simpan/(:any)/(:any)']     = 'penilaianjuri/save/$1/$2';
 $route['juri/penilaian/edit/(:any)']     = 'penilaianjuri/edit/$1';

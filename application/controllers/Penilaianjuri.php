@@ -31,20 +31,22 @@ class Penilaianjuri extends User_Controller
 		$this->assets 	= array('assets_form');
 
 		$id = base64_decode($id);
+		$data['juri'] = $this->m_juri->by_user($this->user->u_id)->row();
         $data['area'] = $this->m_area->by_id($id)->row();
-        $data['penilaian'] = $this->m_penilaian->penilaian_by_area($id)->result();
-        
+        $data['penilaian'] = $this->m_penilaian->penilaian_by_area($id,$data['juri']->j_id)->result();
+
 		$param = array(
 			'data'	=> $data,
 		);
 		$this->template($param);
 
 	}
-	public function save($id)
+	public function save($id,$juri)
 	{
         $id = base64_decode($id);
+        $juri = base64_decode($juri);
 
-        if ($this->m_penilaian->save($id)) {
+        if ($this->m_penilaian->save($id,$juri)) {
             fs_create_alert(['type' => 'success', 'message' => 'Data Penilaian berhasil disimpan.']);
             redirect('juri/penilaian/edit/'.base64_encode($id));
         } else {
@@ -83,10 +85,10 @@ class Penilaianjuri extends User_Controller
 						<i class="fa fa-caret-down"></i>
 					</button>
 					<ul class="dropdown-menu">
-                        <li>' . anchor("user/penilaian/edit/" . base64_encode($tps->a_kode), "<i class=\"fa fa-edit\"></i>Edit") . '</li>
+                        <li>' . anchor("juri/penilaian/edit/" . base64_encode($tps->a_kode), "<i class=\"fa fa-edit\"></i>Edit") . '</li>
 					</ul>
                 </div>';
-            $btninsert = anchor("user/penilaian/edit/" . base64_encode($tps->a_kode), "<i class=\"fa fa-edit\"></i> Input Nilai",array('class'=>'btn btn-xs btn-primary'));
+            $btninsert = anchor("juri/penilaian/edit/" . base64_encode($tps->a_kode), "<i class=\"fa fa-edit\"></i> Input Nilai",array('class'=>'btn btn-xs btn-primary'));
 			$no++;
 			$row = array();
 			$row[] = $tps->a_kode;

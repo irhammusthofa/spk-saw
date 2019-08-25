@@ -33,7 +33,7 @@ class Sensitifitas extends User_Controller
 			foreach ($data['kriteria'] as $kriteria) {
 				$param['area'] 		= $area->a_kode;
 				$param['kriteria'] 	= $kriteria->k_kode;
-				$nilai = $this->m_penilaian->penilaian_kriteria_area($param)->row();
+				$nilai = $this->m_penilaian->penilaian_kriteria_area_2($param)->row();
 				
 				if (!empty($nilai)){
 					$tmp_val = $nilai->pn_nilai/5;
@@ -60,7 +60,7 @@ class Sensitifitas extends User_Controller
 				foreach ($data['kriteria'] as $kriteria) {
 					$param['area'] 		= $area->a_kode;
 					$param['kriteria'] 	= $kriteria->k_kode;
-					$nilai = $this->m_penilaian->penilaian_kriteria_area($param)->row();
+					$nilai = $this->m_penilaian->penilaian_kriteria_area_2($param)->row();
 					
 					if (!empty($nilai)){
 						$tmp_val = $nilai->pn_nilai/5;

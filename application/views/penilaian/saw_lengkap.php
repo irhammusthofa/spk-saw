@@ -48,10 +48,10 @@
                             <?php foreach ($data['kriteria'] as $kriteria) {
                                 $param['area'] = $area->a_kode;
                                 $param['kriteria'] = $kriteria->k_kode;
-                                $nilai = $this->m_penilaian->penilaian_kriteria_area($param)->row();
+                                $nilai = $this->m_penilaian->penilaian_kriteria_area_2($param)->row();
                                 $nilai = (empty($nilai)) ? 0 : @$nilai->pn_nilai;
                             ?>
-                                <td><?= @$nilai ?></td>
+                                <td><?= round(@$nilai,2) ?></td>
                             <?php } ?>
                         </tr>
                     <?php } ?>
@@ -82,7 +82,7 @@
                             <?php foreach ($data['kriteria'] as $kriteria) {
                                 $param['area'] = $area->a_kode;
                                 $param['kriteria'] = $kriteria->k_kode;
-                                $nilai = $this->m_penilaian->penilaian_kriteria_area($param)->row();
+                                $nilai = $this->m_penilaian->penilaian_kriteria_area_2($param)->row();
                             ?>
                                 <td><?= @$data['normalisasi'][$area->a_kode][$kriteria->k_kode] ?></td>
                             <?php } ?>

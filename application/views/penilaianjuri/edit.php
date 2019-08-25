@@ -218,7 +218,7 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-                <?= form_open('juri/penilaian/simpan/'.base64_encode($data['area']->a_kode),array('method'=>'post','class'=>'form-horizontal')) ?>
+                <?= form_open('juri/penilaian/simpan/'.base64_encode($data['area']->a_kode).'/'.base64_encode($data['juri']->j_id),array('method'=>'post','class'=>'form-horizontal')) ?>
                 <div class="box-body">
                     <table id="dtable" class="table table-bordered">
                         <thead>

@@ -19,7 +19,7 @@ class M_saw extends CI_Model
             foreach ($kriteria as $item) {
                 $param['area'] = $a->a_kode;
                 $param['kriteria'] = $item->k_kode;
-                $nilai = $this->m_penilaian->penilaian_kriteria_area($param)->row();
+                $nilai = $this->m_penilaian->penilaian_kriteria_area_2($param)->row();
                 $max = $this->m_penilaian->get_max_kriteria($item->k_kode);
                 if (empty($nilai)){
                     $nilai = 0;

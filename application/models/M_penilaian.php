@@ -7,10 +7,17 @@ class M_penilaian extends CI_Model
         $this->load->model('m_kriteria');
         $this->load->model('m_area');
     }
-    public function penilaian_by_area($id){
+    public function penilaian_by_area($id,$juri){
         return $this->db->from('kriteria k')
-            ->join('penilaian p','p.id_kriteria=k.k_kode and p.id_area="'.$id.'"','left')
+            ->join('penilaian p','p.id_kriteria=k.k_kode and p.id_area="'.$id.'" and p.id_juri="'.$juri.'"','left')
             ->order_by('k.k_kode','asc')
+            ->get();
+    }
+    public function penilaian_kriteria_area_2($param){
+        return $this->db->select('avg(pn_nilai) as pn_nilai')
+            ->from('penilaian')
+            ->where('id_area',$param['area'])
+            ->where('id_kriteria',$param['kriteria'])
             ->get();
     }
     public function get_max_kriteria($kriteria){
@@ -23,6 +30,7 @@ class M_penilaian extends CI_Model
         return $this->db->from('penilaian')
             ->where('id_area',$param['area'])
             ->where('id_kriteria',$param['kriteria'])
+            ->where('id_juri',$param['juri'])
             ->get();
     }
     public function penilaian_all(){
@@ -37,16 +45,18 @@ class M_penilaian extends CI_Model
             ->where('p.pn_id',$id)
             ->get();
     }
-    public function save($id){
+    public function save($id,$juri){
 
-        $kriteria = $this->penilaian_by_area($id)->result();
+        $kriteria = $this->penilaian_by_area($id,$juri)->result();
         $this->db->trans_begin();
         foreach ($kriteria as $item) {
+            $data['id_juri']        = $juri;
             $data['id_area']        = $id;
             $data['id_kriteria']    = $item->k_kode;
             $data['pn_nilai']        = $this->input->post($item->k_kode,TRUE);
             $param['area']          = $data['id_area'];
             $param['kriteria']      = $data['id_kriteria'];
+            $param['juri']      = $juri;
 
             $penilaian = $this->penilaian_kriteria_area($param)->row();
             if (empty($penilaian)){
@@ -105,14 +115,15 @@ class M_penilaian extends CI_Model
     }
     public function rata2_kriteria($alternatif,$kriteria){
         //$count = count($this->list_sub_kriteria($kriteria)->result());
-        $sum = $this->db->select('sum(pn_nilai) AS nilai')
+        $sum = $this->db->select('avg(pn_nilai) AS nilai')
             ->from('penilaian p')
             ->join('kriteria k','k.k_kode=p.id_kriteria','inner')
+            ->where('k.id_tahun',$this->thn_aktif)
             ->where('p.id_area',$alternatif)
             ->where('k.k_kode',$kriteria)
             ->get()->row()->nilai;
         //if ($sum==0) return 0;
-        return $sum;
+        return round($sum,2);
     }
     private function get_bobot($kode_kriteria,$alternatif,$kode_kriteria_uji=''){
         // $tim_saya =  $this->m_cip->by_id($kode)->row();

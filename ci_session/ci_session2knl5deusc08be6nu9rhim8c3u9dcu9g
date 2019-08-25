@@ -1,0 +1,6 @@
+__ci_last_regenerate|i:1566722735;tahun|a:1:{i:2020;s:4:"2020";}tahun_aktif|s:4:"2020";role|s:4:"juri";u_id|s:1:"4";is_loggedin|b:1;notification|s:227:"<div class="box-body">
+	  <div class="alert alert-success alert-dismissible">
+	    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+	    Data Penilaian berhasil disimpan.
+	  </div>
+	</div>";__ci_vars|a:1:{s:12:"notification";s:3:"old";}
