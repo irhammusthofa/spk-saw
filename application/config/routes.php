@@ -101,3 +101,23 @@ $route['user/histori']         = 'histori';
 
 $route['user/perbandingan']         = 'perbandingan';
 $route['user/sensitifitas']         = 'sensitifitas';
+
+$route['user/juri']         = 'juri';
+$route['user/juri/add']     = 'juri/add';
+$route['user/juri/simpan']     = 'juri/save';
+$route['user/juri/edit/(:any)']     = 'juri/edit/$1';
+$route['user/juri/update/(:any)']     = 'juri/update/$1';
+$route['user/juri/hapus/(:any)']     = 'juri/delete/$1';
+
+
+$route['user/juri/pembagiantim/(:any)']         = 'pembagiantim/index/$1';
+$route['user/juri/pembagiantim/add/(:any)']     	= 'pembagiantim/add/$1';
+$route['user/juri/pembagiantim/simpan/(:any)']     = 'pembagiantim/save/$1';
+$route['user/juri/pembagiantim/edit/(:any)/(:any)']     = 'pembagiantim/edit/$1/$2';
+$route['user/juri/pembagiantim/update/(:any)/(:any)']     = 'pembagiantim/update/$1/$2';
+$route['user/juri/pembagiantim/hapus/(:any)/(:any)']     = 'pembagiantim/delete/$1/$2';
+
+
+$route['juri/penilaian']         = 'penilaianjuri';
+$route['juri/penilaian/simpan/(:any)']     = 'penilaianjuri/save/$1';
+$route['juri/penilaian/edit/(:any)']     = 'penilaianjuri/edit/$1';

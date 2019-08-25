@@ -12,13 +12,17 @@ class M_area extends CI_Model
     public function __construct()
     {
         parent::__construct();
+        $this->load->model('m_juri_tim');
     }
 
     private function _get_datatables_query($param='')
     {
         $this->db->from($this->table);
-        $this->db->where('id_tahun',$this->thn_aktif);
-    
+        $this->db->where('c.id_tahun',$this->thn_aktif);
+        if ($this->user->u_role=='juri'){
+            $this->db->join('juri_tim jt','jt.id_tim=c.a_kode','inner');
+            $this->db->where('jt.id_juri',$param['id_juri']);
+        }
         $i = 0;
         foreach ($this->column_search as $item) // loop column
         {
@@ -71,6 +75,10 @@ class M_area extends CI_Model
     {
         $this->db->from($this->table);
         $this->db->where('id_tahun',$this->thn_aktif);
+        if ($this->user->u_role=='juri'){
+            $this->db->join('juri_tim jt','jt.id_tim=c.a_kode','inner');
+            $this->db->where('jt.id_juri',$param['id_juri']);
+        }
         return $this->db->count_all_results();
     }
     public function all(){
@@ -114,6 +122,19 @@ class M_area extends CI_Model
     public function count(){
         $this->db->where('id_tahun',$this->thn_aktif);
         return $this->db->from('area')->count_all_results();
+    }
+    public function tim_belum_dipilih($juri){
+        $juri_tim = $this->m_juri_tim->by_juri($juri)->result();
+        $id_tim = '';
+        foreach ($juri_tim as $item) {
+            $id_tim[] = $item->id_tim;
+        }
+        $this->db->from('area c');
+        if (!empty($id_tim)){
+            $this->db->where_not_in('c.a_kode',$id_tim); 
+        }
+        
+        return $this->db->get();
     }
     public function generate_id(){
         // nomor/CIP-PTG/Tahun contoh (12/CIP-PTG/2019)

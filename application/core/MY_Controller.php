@@ -86,8 +86,8 @@ class User_Controller extends CI_Controller {
 		if ($this->current_class=="authentication" && $this->current_method=="index"){
 			if ($this->user->u_role=="user"){
 				redirect('user/dashboard');
-			}else{
-				//redirect('admin/dashboard');
+			}else if ($this->user->u_role=="juri"){
+				redirect('juri/penilaian');
 			}
 			redirect('admin/dashboard');
 		}
